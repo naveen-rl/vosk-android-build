@@ -42,6 +42,7 @@ jobs:
         run: |
           cd vosk-api/android
           sed -i '/archivesBaseName/d' lib/build.gradle
+          sed -i '/archivesBaseName/d' model-en/build.gradle
 
       - name: Build Vosk JNI (16 KB)
         run: |
