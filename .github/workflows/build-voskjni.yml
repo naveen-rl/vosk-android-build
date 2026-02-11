@@ -11,10 +11,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y git unzip wget zip cmake openjdk-17-jdk python3
+          sudo apt install -y git unzip wget zip cmake python3
 
       - name: Download Android NDK r26d
         run: |
@@ -35,8 +41,8 @@ jobs:
       - name: Build Vosk JNI (16 KB)
         run: |
           cd vosk-api/android
+          java -version
           gradle :lib:buildVosk
-
 
       - name: Verify 16 KB alignment
         run: |
@@ -47,4 +53,3 @@ jobs:
         with:
           name: libvosk-arm64-16kb
           path: vosk-api/android/lib/build/intermediates/cmake/release/obj/arm64-v8a/libvosk.so
-
