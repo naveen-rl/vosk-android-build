@@ -34,7 +34,7 @@ jobs:
           echo "ANDROID_NDK_HOME=$HOME/android/android-ndk-r26d" >> $GITHUB_ENV
           echo "$HOME/android/android-ndk-r26d" >> $GITHUB_PATH
 
-           - name: Clone Vosk
+      - name: Clone Vosk
         run: |
           git clone https://github.com/alphacep/vosk-api.git
 
@@ -48,7 +48,6 @@ jobs:
           cd vosk-api/android
           java -version
           gradle :lib:buildVosk
-
 
       - name: Verify 16 KB alignment
         run: |
