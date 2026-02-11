@@ -50,12 +50,19 @@ jobs:
           java -version
           gradle :lib:buildVosk
 
+      - name: Locate libvosk.so
+        run: |
+          find vosk-api/android -name "libvosk.so"
+
       - name: Verify 16 KB alignment
         run: |
-          readelf -l vosk-api/android/lib/build/intermediates/cmake/release/obj/arm64-v8a/libvosk.so | grep LOAD
+          LIBVOSK=$(find vosk-api/android -name "libvosk.so" | head -n 1)
+          echo "Using $LIBVOSK"
+          readelf -l "$LIBVOSK" | grep LOAD
 
       - name: Upload libvosk.so
         uses: actions/upload-artifact@v4
         with:
           name: libvosk-arm64-16kb
-          path: vosk-api/android/lib/build/intermediates/cmake/release/obj/arm64-v8a/libvosk.so
+          path: |
+            **/libvosk.so
