@@ -38,13 +38,12 @@ jobs:
           chmod +x gradlew
           ./gradlew :lib:buildVosk
 
-
       - name: Verify 16 KB alignment
         run: |
-          readelf -l vosk-api/android/lib/src/main/jniLibs/arm64-v8a/libvosk.so | grep LOAD
+          readelf -l vosk-api/android/lib/build/intermediates/cmake/release/obj/arm64-v8a/libvosk.so | grep LOAD
 
       - name: Upload libvosk.so
         uses: actions/upload-artifact@v4
         with:
           name: libvosk-arm64-16kb
-          path: vosk-api/android/lib/src/main/jniLibs/arm64-v8a/libvosk.so
+          path: vosk-api/android/lib/build/intermediates/cmake/release/obj/arm64-v8a/libvosk.so
