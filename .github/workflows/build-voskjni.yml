@@ -1,0 +1,48 @@
+name: Build Vosk JNI (16KB)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git unzip wget zip cmake openjdk-17-jdk python3
+
+      - name: Download Android NDK r26d
+        run: |
+          mkdir -p $HOME/android
+          cd $HOME/android
+          wget https://dl.google.com/android/repository/android-ndk-r26d-linux.zip
+          unzip android-ndk-r26d-linux.zip
+
+      - name: Set NDK env
+        run: |
+          echo "ANDROID_NDK_HOME=$HOME/android/android-ndk-r26d" >> $GITHUB_ENV
+          echo "$HOME/android/android-ndk-r26d" >> $GITHUB_PATH
+
+      - name: Clone Vosk
+        run: |
+          git clone https://github.com/alphacep/vosk-api.git
+
+      - name: Build Vosk JNI (16 KB)
+        run: |
+          cd vosk-api/android
+          ./build-vosk.sh
+
+      - name: Verify 16 KB alignment
+        run: |
+          readelf -l vosk-api/android/lib/src/main/jniLibs/arm64-v8a/libvosk.so | grep LOAD
+
+      - name: Upload libvosk.so
+        uses: actions/upload-artifact@v4
+        with:
+          name: libvosk-arm64-16kb
+          path: vosk-api/android/lib/src/main/jniLibs/arm64-v8a/libvosk.so
