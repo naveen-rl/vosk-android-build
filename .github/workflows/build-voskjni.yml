@@ -35,8 +35,9 @@ jobs:
       - name: Build Vosk JNI (16 KB)
         run: |
           cd vosk-api/android
-          ls -la
-          bash build-vosk.sh
+          chmod +x gradlew
+          ./gradlew :lib:buildVosk
+
 
       - name: Verify 16 KB alignment
         run: |
