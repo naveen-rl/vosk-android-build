@@ -35,7 +35,8 @@ jobs:
       - name: Build Vosk JNI (16 KB)
         run: |
           cd vosk-api/android
-          ./build-vosk.sh
+          ls -la
+          bash build-vosk.sh
 
       - name: Verify 16 KB alignment
         run: |
